@@ -41,13 +41,13 @@ neofetch is a type-safe, promise-based HTTP client for the browser and Node.js. 
 
 ```bash
 # Using npm
-npm install 
+npm install neofetch
 
 # Using yarn
-yarn add 
+yarn add neofetch
 
 # Using pnpm
-pnpm add 
+pnpm add neofetch
 ```
 
 ## Basic Usage
@@ -55,7 +55,7 @@ pnpm add
 ### Making Requests
 
 ```typescript
-import neofetch from '';
+import neofetch from 'neofetch';
 
 // GET request
 neofetch.get('/users')
