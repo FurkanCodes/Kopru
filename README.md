@@ -5,15 +5,15 @@ NeoFetch is a modern HTTP client for JavaScript/TypeScript applications that pro
 ## Installation
 
 ```bash
-npm install neofetch
+npm install neo-fetch
 # or
-yarn add neofetch
+yarn add neo-fetch
 ```
 
 ## Basic Usage
 
 ```typescript
-import neofetch from 'neofetch';
+import neofetch from 'neo-fetch';
 
 // Simple GET request
 neofetch.get('https://api.example.com/data')
