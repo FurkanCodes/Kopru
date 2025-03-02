@@ -1,4 +1,4 @@
-import neofetch, { HttpClient } from "../index";
+import kopru, { HttpClient } from "../index";
 
 // Mock the global fetch function
 global.fetch = jest.fn();
@@ -9,8 +9,8 @@ describe("HttpClient", () => {
   });
 
   it("should be defined", () => {
-    expect(neofetch).toBeDefined();
-    expect(neofetch instanceof HttpClient).toBeTruthy();
+    expect(kopru).toBeDefined();
+    expect(kopru instanceof HttpClient).toBeTruthy();
   });
 
   it("should create a new instance with custom config", () => {

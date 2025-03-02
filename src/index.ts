@@ -312,7 +312,7 @@ export class HttpClient {
 }
 
 // Create default instance
-const neofetch = new HttpClient();
+const kopru = new HttpClient();
 
 // Export both the class and default instance
-export { neofetch as default };
+export { kopru as default };

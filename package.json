@@ -1,5 +1,5 @@
 {
-  "name": "neo-fetch",
+  "name": "kopru",
   "version": "1.0.0",
   "description": " Type-safe Axios-like wrapper for the Fetch API",
   "main": "dist/index.js",
