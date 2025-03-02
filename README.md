@@ -1,3 +1,8 @@
+
+
+
+**DISCLAIMER**
+This is a work in progress  project.
 # NeoFetch Documentation
 
 NeoFetch is a modern HTTP client for JavaScript/TypeScript applications that provides a clean, promise-based API for making HTTP requests. It's designed to be feature-rich while maintaining a simple interface, similar to popular libraries like Axios.
@@ -289,8 +294,3 @@ api.interceptors.response.use(
 // Export for use throughout the application
 export default api;
 ```
-
-This documentation covers the main features and usage patterns of NeoFetch, providing developers with a comprehensive guide to leverage its capabilities for making HTTP requests in modern JavaScript applications.
-
-Citations:
-[1] [paste.txt](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/31127038/407d541c-6019-4991-90c6-318ab3743fc2/paste.txt)
