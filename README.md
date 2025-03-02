@@ -16,7 +16,7 @@ yarn add neo-fetch
 ## Basic Usage
 
 ```typescript
-import kopru from "neo-fetch";
+import kopru from "kopru";
 
 // Simple GET request
 kopru
