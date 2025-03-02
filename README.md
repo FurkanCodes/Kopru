@@ -3,7 +3,7 @@ This is a work in progress project.
 
 # kopru Documentation
 
-kopru is a modern HTTP client for JavaScript/TypeScript applications that provides a clean, promise-based API for making HTTP requests. It's designed to be feature-rich while maintaining a simple interface, similar to popular libraries like Axios.
+Kopru is a modern HTTP client for JavaScript/TypeScript applications that provides a clean, promise-based API for making HTTP requests. It's designed to be feature-rich while maintaining a simple interface, similar to popular libraries like Axios.
 
 ## Installation
 
