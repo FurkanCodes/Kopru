@@ -1,64 +1,22 @@
-# neofetch Documentation
+# NeoFetch Documentation
 
-## Table of Contents
-
-1. [Introduction](#introduction)
-2. [Installation](#installation)
-3. [Basic Usage](#basic-usage)
-4. [API Reference](#api-reference)
-    - [Main Client](#main-client)
-    - [Request Configuration](#request-configuration)
-    - [Response Format](#response-format)
-    - [Error Handling](#error-handling)
-    - [Interceptors](#interceptors)
-5. [Advanced Usage](#advanced-usage)
-    - [Creating Instances](#creating-instances)
-    - [TypeScript Integration](#typescript-integration)
-    - [Request Cancellation](#request-cancellation)
-    - [Progress Tracking](#progress-tracking)
-6. [Examples](#examples)
-7. [Migration Guide](#migration-guide)
-8. [Contributing](#contributing)
-9. [License](#license)
-
-## Introduction
-
-neofetch is a type-safe, promise-based HTTP client for the browser and Node.js. It provides a clean, familiar interface similar to Axios while leveraging the modern Fetch API under the hood.
-
-**Key Features:**
-
-- Full TypeScript support with generics for request/response data
-- Request and response interceptors
-- Automatic transforms for JSON data
-- Client-side protection against XSRF
-- Request cancellation
-- Automatic request timeouts
-- Clean error handling
-- Instance creation with custom defaults
-- SOLID principles and clean architecture
+NeoFetch is a modern HTTP client for JavaScript/TypeScript applications that provides a clean, promise-based API for making HTTP requests. It's designed to be feature-rich while maintaining a simple interface, similar to popular libraries like Axios.
 
 ## Installation
 
 ```bash
-# Using npm
 npm install neofetch
-
-# Using yarn
+# or
 yarn add neofetch
-
-# Using pnpm
-pnpm add neofetch
 ```
 
 ## Basic Usage
 
-### Making Requests
-
 ```typescript
 import neofetch from 'neofetch';
 
-// GET request
-neofetch.get('/users')
+// Simple GET request
+neofetch.get('https://api.example.com/data')
   .then(response => {
     console.log(response.data);
   })
@@ -66,307 +24,192 @@ neofetch.get('/users')
     console.error('Error:', error);
   });
 
-// POST request
-neofetch.post('/users', {
-  name: 'John Doe',
-  email: 'john@example.com'
-})
-  .then(response => {
-    console.log(response.data);
-  });
-
-// Async/await
-async function getUser(id) {
+// Using async/await
+async function fetchData() {
   try {
-    const response = await neofetch.get(`/users/${id}`);
-    return response.data;
+    const response = await neofetch.get('https://api.example.com/data');
+    console.log(response.data);
   } catch (error) {
-    console.error('Error fetching user:', error);
-    throw error;
+    console.error('Error:', error);
   }
 }
 ```
 
-### Request Methods
+## Key Features
 
-neofetch supports all standard HTTP methods:
+### HTTP Methods
+
+NeoFetch supports all standard HTTP methods:
 
 ```typescript
 // GET request
-neofetch.get(url[, config])
+neofetch.get('/users');
 
-// POST request
-neofetch.post(url[, data[, config]])
+// POST request with data
+neofetch.post('/users', { name: 'John', email: 'john@example.com' });
 
 // PUT request
-neofetch.put(url[, data[, config]])
+neofetch.put('/users/1', { name: 'John Updated' });
 
 // PATCH request
-neofetch.patch(url[, data[, config]])
+neofetch.patch('/users/1', { name: 'John Patched' });
 
 // DELETE request
-neofetch.delete(url[, config])
+neofetch.delete('/users/1');
 
 // HEAD request
-neofetch.head(url[, config])
+neofetch.head('/users');
 
 // OPTIONS request
-neofetch.options(url[, config])
+neofetch.options('/users');
 ```
-
-## API Reference
-
-### Main Client
-
-#### `neofetch.request(config)`
-
-```typescript
-neofetch.request<T = any, D = any>(config: RequestConfig<D>): Promise<HttpResponse<T>>
-```
-
-Make an HTTP request based on the provided configuration object.
-
-#### `neofetch.get(url[, config])`
-
-```typescript
-neofetch.get<T = any>(url: string, config?: Omit<RequestConfig, 'url' | 'method'>): Promise<HttpResponse<T>>
-```
-
-Make a GET request to the specified URL.
-
-#### `neofetch.post(url[, data[, config]])`
-
-```typescript
-neofetch.post<T = any, D = any>(url: string, data?: D, config?: Omit<RequestConfig, 'url' | 'method' | 'body'>): Promise<HttpResponse<T>>
-```
-
-Make a POST request to the specified URL with optional data.
-
-#### `neofetch.put(url[, data[, config]])`
-
-```typescript
-neofetch.put<T = any, D = any>(url: string, data?: D, config?: Omit<RequestConfig, 'url' | 'method' | 'body'>): Promise<HttpResponse<T>>
-```
-
-Make a PUT request to the specified URL with optional data.
-
-#### `neofetch.patch(url[, data[, config]])`
-
-```typescript
-neofetch.patch<T = any, D = any>(url: string, data?: D, config?: Omit<RequestConfig, 'url' | 'method' | 'body'>): Promise<HttpResponse<T>>
-```
-
-Make a PATCH request to the specified URL with optional data.
-
-#### `neofetch.delete(url[, config])`
-
-```typescript
-neofetch.delete<T = any>(url: string, config?: Omit<RequestConfig, 'url' | 'method'>): Promise<HttpResponse<T>>
-```
-
-Make a DELETE request to the specified URL.
 
 ### Request Configuration
 
-The `RequestConfig` interface defines the configuration options for making requests:
+You can customize requests with a configuration object:
 
 ```typescript
-interface RequestConfig<D = any> {
-  baseURL?: string;           // Base URL to be prepended to 'url'
-  url?: string;               // URL for the request
-  method?: HttpMethod;        // HTTP method
-  headers?: Record<string, string>; // Request headers
-  params?: Record<string, string | number | boolean | null | undefined>; // URL parameters
-  body?: D;                   // Request body
-  timeout?: number;           // Request timeout in ms
-  responseType?: 'json' | 'text' | 'blob' | 'arraybuffer'; // Expected response type
-  signal?: AbortSignal;       // AbortSignal for request cancellation
-}
+neofetch.get('/users', {
+  baseURL: 'https://api.example.com',
+  headers: {
+    'Authorization': 'Bearer token123',
+    'Accept': 'application/json'
+  },
+  params: {
+    page: 1,
+    limit: 10,
+    filter: 'active'
+  },
+  timeout: 5000, // 5 seconds
+  responseType: 'json' // 'json', 'text', 'blob', or 'arraybuffer'
+});
 ```
 
-### Response Format
+### Creating Custom Instances
 
-The `HttpResponse` interface defines the structure of the response object:
-
-```typescript
-interface HttpResponse<T = any> {
-  data: T;                    // Response payload
-  status: number;             // HTTP status code
-  statusText: string;         // HTTP status message
-  headers: Record<string, string>; // Response headers
-  config: RequestConfig;      // Request configuration
-}
-```
-
-### Error Handling
-
-When a request fails, neofetch throws an `HttpError` that contains information about the request and response:
+Create instances with custom default configurations:
 
 ```typescript
-interface HttpError<T = any> extends Error {
-  config: RequestConfig;      // Original request configuration
-  status?: number;            // HTTP status code (if available)
-  statusText?: string;        // HTTP status message (if available)
-  headers?: Record<string, string>; // Response headers (if available)
-  data?: T;                   // Response data (if available)
-}
-```
+const api = neofetch.create({
+  baseURL: 'https://api.example.com',
+  headers: {
+    'Authorization': 'Bearer token123',
+    'Content-Type': 'application/json'
+  },
+  timeout: 10000
+});
 
-Example error handling:
-
-```typescript
-neofetch.get('/users/1')
-  .then(response => {
-    console.log('User:', response.data);
-  })
-  .catch(error => {
-    if (error.status === 404) {
-      console.log('User not found');
-    } else if (error.message.includes('timeout')) {
-      console.log('Request timed out');
-    } else {
-      console.error('Error making request:', error.message);
-    }
-    
-    // Access error response data if available
-    if (error.data) {
-      console.error('Server error details:', error.data);
-    }
-  });
+// Now use this custom instance
+api.get('/users');
 ```
 
 ### Interceptors
 
-Interceptors allow you to intercept requests or responses before they are handled by `then` or `catch`.
-
-#### Request Interceptors
+Interceptors allow you to intercept requests or responses before they are handled:
 
 ```typescript
-// Add a request interceptor
-const interceptorId = neofetch.interceptors.request.use(
-  // OnFulfilled handler
+// Request interceptor
+const requestInterceptor = neofetch.interceptors.request.use(
   config => {
-    // Modify request config before sending
+    // Modify config before request is sent
     config.headers = {
       ...config.headers,
       'Authorization': `Bearer ${getToken()}`
     };
     return config;
   },
-  // OnRejected handler (optional)
   error => {
-    console.error('Request interceptor error:', error);
+    // Handle request errors
     return Promise.reject(error);
   }
 );
 
-// Remove the interceptor later if needed
-neofetch.interceptors.request.eject(interceptorId);
-```
-
-#### Response Interceptors
-
-```typescript
-// Add a response interceptor
-const interceptorId = neofetch.interceptors.response.use(
-  // OnFulfilled handler
+// Response interceptor
+const responseInterceptor = neofetch.interceptors.response.use(
   response => {
-    // Transform successful response
-    if (response.data && response.data.results) {
-      response.data = response.data.results;
-    }
+    // Any status code within the range of 2xx
     return response;
   },
-  // OnRejected handler (optional)
   error => {
-    // Handle response error globally
+    // Any status codes outside the range of 2xx
     if (error.status === 401) {
-      // Redirect to login or refresh token
+      // Handle unauthorized error
       refreshToken();
     }
     return Promise.reject(error);
   }
 );
 
-// Remove the interceptor later if needed
-neofetch.interceptors.response.eject(interceptorId);
+// Remove interceptors if needed
+neofetch.interceptors.request.eject(requestInterceptor);
+neofetch.interceptors.response.eject(responseInterceptor);
 ```
 
-## Advanced Usage
+### Handling Responses
 
-### Creating Instances
-
-You can create a customized instance of neofetch with specific default settings:
+Responses are structured with useful information:
 
 ```typescript
-import { HttpClient } from '';
-
-const apiClient = new HttpClient({
-  baseURL: 'https://api.example.com/v1',
-  timeout: 10000,
-  headers: {
-    'X-API-Key': 'your-api-key',
-    'Accept': 'application/json'
-  }
-});
-
-// Use the new instance
-apiClient.get('/users')
+neofetch.get('/users/1')
   .then(response => {
-    console.log(response.data);
+    console.log(response.data);       // Response body
+    console.log(response.status);     // HTTP status code
+    console.log(response.statusText); // HTTP status message
+    console.log(response.headers);    // Response headers
+    console.log(response.config);     // Request configuration
   });
 ```
 
-### TypeScript Integration
+### Error Handling
 
-neofetch leverages TypeScript's generics to provide type safety for your API calls:
+Errors provide detailed information about what went wrong:
 
 ```typescript
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface CreateUserRequest {
-  name: string;
-  email: string;
-  password: string;
-}
-
-// GET with response type
-const getUser = async (id: number): Promise<User> => {
-  const response = await neofetch.get<User>(`/users/${id}`);
-  return response.data; // Typed as User
-};
-
-// POST with request and response types
-const createUser = async (userData: CreateUserRequest): Promise<User> => {
-  const response = await neofetch.post<User, CreateUserRequest>('/users', userData);
-  return response.data; // Typed as User
-};
+neofetch.get('/users/999')
+  .catch(error => {
+    if (error.status) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.status);
+      console.log(error.statusText);
+      console.log(error.data);
+      console.log(error.headers);
+    } else if (error.message.includes('timeout')) {
+      // The request timed out
+      console.log('Request timed out');
+    } else {
+      // Something happened in setting up the request
+      console.log('Error:', error.message);
+    }
+    console.log(error.config); // Request configuration
+  });
 ```
 
-### Request Cancellation
+### Timeout Handling
 
-You can cancel requests using the AbortController API:
+Set timeouts to abort requests that take too long:
 
 ```typescript
-// Create an abort controller
+// Set a 5-second timeout
+neofetch.get('/users', { timeout: 5000 })
+  .catch(error => {
+    if (error.message.includes('timeout')) {
+      console.log('Request timed out after 5 seconds');
+    }
+  });
+```
+
+### Abort Requests
+
+Cancel requests using AbortController:
+
+```typescript
 const controller = new AbortController();
 
-// Pass the signal to the request
-neofetch.get('/users', {
-  signal: controller.signal
-})
-  .then(response => {
-    console.log('Response:', response.data);
-  })
+neofetch.get('/users', { signal: controller.signal })
   .catch(error => {
     if (error.name === 'AbortError') {
-      console.log('Request was canceled');
-    } else {
-      console.error('Error:', error);
+      console.log('Request was cancelled');
     }
   });
 
@@ -374,45 +217,39 @@ neofetch.get('/users', {
 controller.abort();
 ```
 
-### Progress Tracking
+### Different Response Types
 
-For large file uploads, you can track progress using the Fetch API's ReadableStream:
+Handle various response formats:
 
 ```typescript
-const uploadFile = async (file: File) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  
-  const controller = new AbortController();
-  
-  try {
-    const response = await neofetch.post('/upload', formData, {
-      headers: {
-        // Don't set Content-Type for FormData, browser will add boundary
-        'Content-Type': undefined,
-      },
-      signal: controller.signal,
-      onUploadProgress: (progressEvent) => {
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        console.log(`Upload progress: ${percentCompleted}%`);
-      }
-    });
-    
-    return response.data;
-  } catch (error) {
-    console.error('Upload failed:', error);
-    throw error;
-  }
-};
+// Get JSON (default)
+neofetch.get('/data', { responseType: 'json' });
+
+// Get text
+neofetch.get('/data.txt', { responseType: 'text' });
+
+// Get binary data
+neofetch.get('/image.png', { responseType: 'blob' });
+
+// Get ArrayBuffer
+neofetch.get('/data.bin', { responseType: 'arraybuffer' });
 ```
 
-## Examples
-
-### Authentication
+## Advanced Example
 
 ```typescript
-// Setup authentication interceptor
-neofetch.interceptors.request.use(config => {
+// Create a custom instance
+const api = neofetch.create({
+  baseURL: 'https://api.example.com/v1',
+  timeout: 8000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
+
+// Add request interceptor to add auth token
+api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers = {
@@ -423,159 +260,37 @@ neofetch.interceptors.request.use(config => {
   return config;
 });
 
-// Handle expired tokens
-neofetch.interceptors.response.use(
+// Add response interceptor for error handling
+api.interceptors.response.use(
   response => response,
   async error => {
-    const originalRequest = error.config;
-    
-    // If the error is 401 and we haven't retried yet
-    if (error.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      
+    // Handle token refresh on 401 errors
+    if (error.status === 401 && !error.config._retry) {
+      error.config._retry = true;
       try {
-        // Try to refresh the token
         const refreshToken = localStorage.getItem('refreshToken');
-        const response = await neofetch.post('/auth/refresh', { refreshToken });
+        const response = await api.post('/auth/refresh', { token: refreshToken });
+        const newToken = response.data.token;
+        localStorage.setItem('token', newToken);
         
-        // Store the new token
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-        
-        // Update the auth header
-        originalRequest.headers['Authorization'] = `Bearer ${token}`;
-        
-        // Retry the original request
-        return neofetch.request(originalRequest);
+        // Retry the original request with new token
+        error.config.headers['Authorization'] = `Bearer ${newToken}`;
+        return api.request(error.config);
       } catch (refreshError) {
-        // Refresh failed, redirect to login
-        localStorage.clear();
+        // Refresh token failed, redirect to login
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
-    
     return Promise.reject(error);
   }
 );
+
+// Export for use throughout the application
+export default api;
 ```
 
-### API Service
+This documentation covers the main features and usage patterns of NeoFetch, providing developers with a comprehensive guide to leverage its capabilities for making HTTP requests in modern JavaScript applications.
 
-```typescript
-// users.service.ts
-import neofetch from '';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface UserCreateDto {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface UserUpdateDto {
-  name?: string;
-  email?: string;
-}
-
-export class UserService {
-  private baseUrl = '/api/users';
-  
-  async getAll(): Promise<User[]> {
-    const response = await neofetch.get<User[]>(this.baseUrl);
-    return response.data;
-  }
-  
-  async getById(id: number): Promise<User> {
-    const response = await neofetch.get<User>(`${this.baseUrl}/${id}`);
-    return response.data;
-  }
-  
-  async create(user: UserCreateDto): Promise<User> {
-    const response = await neofetch.post<User, UserCreateDto>(this.baseUrl, user);
-    return response.data;
-  }
-  
-  async update(id: number, updates: UserUpdateDto): Promise<User> {
-    const response = await neofetch.patch<User, UserUpdateDto>(`${this.baseUrl}/${id}`, updates);
-    return response.data;
-  }
-  
-  async delete(id: number): Promise<void> {
-    await neofetch.delete(`${this.baseUrl}/${id}`);
-  }
-}
-
-// Usage
-const userService = new UserService();
-
-// Get all users
-userService.getAll()
-  .then(users => console.log('Users:', users))
-  .catch(error => console.error('Error:', error));
-```
-
-## Migration Guide
-
-### Migrating from Axios
-
-If you're migrating from Axios to neofetch, here are the key differences:
-
-| Feature | Axios | neofetch |
-|---------|-------|----------|
-| Default Import | `import axios from 'axios'` | `import neofetch from ''` |
-| Request Body | `data` property | `body` property |
-| Response Format | Similar | Similar, with `data`, `status`, etc. |
-| Config | Similar overall | Similar overall |
-| Interceptors | Similar | Similar API |
-| Defaults | `axios.defaults` | `neofetch.defaults` |
-| Instance Creation | `axios.create()` | `new HttpClient()` |
-| Request Cancellation | CancelToken (deprecated) or AbortController | AbortController |
-| Progress | `onUploadProgress` / `onDownloadProgress` | `onUploadProgress` / `onDownloadProgress` |
-
-### Migration Example
-
-```typescript
-// Axios code
-import axios from 'axios';
-
-axios.defaults.baseURL = 'https://api.example.com';
-axios.defaults.headers.common['Authorization'] = 'Bearer token';
-
-axios.get('/users')
-  .then(response => console.log(response.data));
-
-// neofetch equivalent
-import neofetch from '';
-
-neofetch.defaults.baseURL = 'https://api.example.com';
-neofetch.defaults.headers['Authorization'] = 'Bearer token';
-
-neofetch.get('/users')
-  .then(response => console.log(response.data));
-```
-
-## Contributing
-
-We welcome contributions to neofetch! Please read our contributing guidelines before submitting pull requests.
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add some amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## License
-
-neofetch is MIT licensed. See the [LICENSE](LICENSE) file for details.
-
----
-
-For any questions or issues, please open an issue on GitHub or contact our support team.
-
-© 2025 neofetch Team
+Citations:
+[1] [paste.txt](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/31127038/407d541c-6019-4991-90c6-318ab3743fc2/paste.txt)
