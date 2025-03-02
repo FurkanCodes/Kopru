@@ -41,13 +41,13 @@ neofetch is a type-safe, promise-based HTTP client for the browser and Node.js. 
 
 ```bash
 # Using npm
-npm install fetch-pro
+npm install 
 
 # Using yarn
-yarn add fetch-pro
+yarn add 
 
 # Using pnpm
-pnpm add fetch-pro
+pnpm add 
 ```
 
 ## Basic Usage
@@ -55,7 +55,7 @@ pnpm add fetch-pro
 ### Making Requests
 
 ```typescript
-import neofetch from 'fetch-pro';
+import neofetch from '';
 
 // GET request
 neofetch.get('/users')
@@ -299,7 +299,7 @@ neofetch.interceptors.response.eject(interceptorId);
 You can create a customized instance of neofetch with specific default settings:
 
 ```typescript
-import { HttpClient } from 'fetch-pro';
+import { HttpClient } from '';
 
 const apiClient = new HttpClient({
   baseURL: 'https://api.example.com/v1',
@@ -464,7 +464,7 @@ neofetch.interceptors.response.use(
 
 ```typescript
 // users.service.ts
-import neofetch from 'fetch-pro';
+import neofetch from '';
 
 interface User {
   id: number;
@@ -528,7 +528,7 @@ If you're migrating from Axios to neofetch, here are the key differences:
 
 | Feature | Axios | neofetch |
 |---------|-------|----------|
-| Default Import | `import axios from 'axios'` | `import neofetch from 'fetch-pro'` |
+| Default Import | `import axios from 'axios'` | `import neofetch from ''` |
 | Request Body | `data` property | `body` property |
 | Response Format | Similar | Similar, with `data`, `status`, etc. |
 | Config | Similar overall | Similar overall |
@@ -551,7 +551,7 @@ axios.get('/users')
   .then(response => console.log(response.data));
 
 // neofetch equivalent
-import neofetch from 'fetch-pro';
+import neofetch from '';
 
 neofetch.defaults.baseURL = 'https://api.example.com';
 neofetch.defaults.headers['Authorization'] = 'Bearer token';
