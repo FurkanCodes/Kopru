@@ -264,7 +264,9 @@ export class HttpClient {
       } catch {
         // Ignore parsing errors for error responses
       }
-
+      if (response.status === 204) {
+        return null as T;
+      }
       throw error;
     }
 
@@ -272,6 +274,10 @@ export class HttpClient {
   }
 
   private async getResponseData<T>(response: Response, responseType: string = "json"): Promise<T> {
+    if (response.status === 204) {
+      return (responseType === "json" ? {} : null) as unknown as T;
+    }
+
     switch (responseType) {
       case "json":
         return response.json();
