@@ -3,20 +3,20 @@ This is a work in progress project.
 
 # kopru Documentation
 
-kopru is a modern HTTP client for JavaScript/TypeScript applications that provides a clean, promise-based API for making HTTP requests. It's designed to be feature-rich while maintaining a simple interface, similar to popular libraries like Axios.
+Kopru(Köprü in Turkish) is a modern HTTP client for JavaScript/TypeScript applications that provides a clean, promise-based API for making HTTP requests. It's designed to be feature-rich while maintaining a simple interface, similar to popular libraries like Axios.
 
 ## Installation
 
 ```bash
-npm install neo-fetch
+npm install kopru
 # or
-yarn add neo-fetch
+yarn add kopru
 ```
 
 ## Basic Usage
 
 ```typescript
-import kopru from "neo-fetch";
+import kopru from "kopru";
 
 // Simple GET request
 kopru
