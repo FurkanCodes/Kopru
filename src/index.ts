@@ -1,40 +1,4 @@
-// Types for requests and responses
-export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
-
-export interface RequestConfig<D = any> {
-  baseURL?: string;
-  url?: string;
-  method?: HttpMethod;
-  headers?: Record<string, string>;
-  params?: Record<string, string | number | boolean | null | undefined>;
-  body?: D;
-  timeout?: number;
-  responseType?: "json" | "text" | "blob" | "arraybuffer";
-  signal?: AbortSignal;
-  onUploadProgress?: (progressEvent: { loaded: number; total: number }) => void;
-}
-
-export interface HttpResponse<T = any> {
-  data: T;
-  status: number;
-  statusText: string;
-  headers: Record<string, string>;
-  config: RequestConfig;
-}
-
-export interface HttpError<T = any> extends Error {
-  config: RequestConfig;
-  status?: number;
-  statusText?: string;
-  headers?: Record<string, string>;
-  data?: T;
-}
-
-// Interceptor interfaces
-interface Interceptor<V> {
-  onFulfilled?: (value: V) => V | Promise<V>;
-  onRejected?: (error: any) => any;
-}
+import { RequestConfig, Interceptor, HttpResponse, HttpError } from "./interfaces";
 
 // Core HTTP client implementation
 export class HttpClient {
@@ -187,7 +151,7 @@ export class HttpClient {
   }
 
   private async executeRequest<T>(config: RequestConfig): Promise<HttpResponse<T>> {
-    const { baseURL, url, timeout, params, responseType, onUploadProgress, ...fetchOptions } = config;
+    const { baseURL, url, timeout, params, responseType,  ...fetchOptions } = config;
 
     // Build URL with query parameters
     const fullURL = new URL(`${baseURL || ""}${url || ""}`);
@@ -309,6 +273,8 @@ export class HttpClient {
     httpError.config = config;
     throw httpError;
   }
+
+  
 }
 
 // Create default instance
