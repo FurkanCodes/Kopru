@@ -23,9 +23,14 @@ export function createServerActionResult<T = any, D = any>(
   }
   
   // If not an error, it must be a response
-  return { data: (responseOrError as HttpResponse<T>).data };
+  const response = responseOrError as HttpResponse<T>;
+  return { 
+    data: response.data,
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers
+  };
 }
-
 
 /**
  * Executes a server action and returns a standardized result
@@ -37,7 +42,12 @@ export async function executeServerAction<T = any, D = any>(
 ): Promise<ServerActionResult<T, D>> {
   try {
     const response = await actionFn();
-    return { data: response.data };
+    return { 
+      data: response.data,
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers
+    };
   } catch (error) {
     if (error instanceof Error) {
       const httpError = error as HttpError<D>;

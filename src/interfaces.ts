@@ -39,11 +39,14 @@ export interface Interceptor<V> {
 }
 
 
-export interface ServerActionResult<T, D>{
-    data?: T;
-    error?: {
-        message: string,
-        status?: number,
-        details: D
-    }
+export interface ServerActionResult<T, D = any> {
+  data?: T;
+  status?: number;
+  statusText?: string;
+  headers?: Record<string, string>;
+  error?: {
+    message: string;
+    status?: number;
+    details: D;
+  };
 }
